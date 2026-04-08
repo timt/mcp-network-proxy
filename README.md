@@ -2,7 +2,7 @@
 
 An open-source [Model Context Protocol](https://modelcontextprotocol.io/) server that exposes the host's network as a set of tools.
 
-It exists for one reason: when an MCP host runs in a sandbox with restricted network egress (for example, Claude Code on the web), the model can't reach the open internet. Run `mcp-network-proxy` on a machine that *does* have unrestricted network access, point the sandboxed host at it over MCP, and the model can fetch arbitrary URLs through the proxy.
+It exists for one reason: when an MCP host runs in a sandbox with restricted network egress (for example, Claude Code on the web or **Claude Cowork**), the model can't reach the open internet. Run `mcp-network-proxy` on a machine that *does* have unrestricted network access, point the sandboxed host at it over MCP, and the model can fetch arbitrary URLs — and therefore make general network/internet calls — through the proxy.
 
 ```
    ┌─────────────────────┐         MCP          ┌──────────────────────┐
