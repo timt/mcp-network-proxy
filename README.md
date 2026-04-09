@@ -1,6 +1,6 @@
 # mcp-network-proxy
 
-An MCP server that gives [Claude Desktop](https://claude.ai/download) and [Cowork](https://www.anthropic.com/research/cowork) access to the internet from your machine.
+An MCP server that gives [Claude Desktop](https://claude.ai/download) / [Cowork](https://www.anthropic.com/research/cowork) access to the internet from your machine.
 
 Cowork tasks run in a sandbox with no network access. This proxy lets them make HTTP requests through your local machine via MCP.
 
