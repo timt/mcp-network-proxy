@@ -20,24 +20,7 @@ Cowork tasks run in a sandbox with no network access. This proxy lets them make 
    cargo install --path .
    ```
 
-3. **Add it to Claude Desktop** — pick one:
-
-   **Option A — Connectors UI (run the server yourself)**
-
-   Start the server in a terminal and leave it running:
-
-   ```sh
-   mcp-network-proxy http --bind 127.0.0.1:8080
-   ```
-
-   Then in Claude Desktop go to **Settings → Connectors → Add custom connector** and enter:
-
-   - **Name:** `network-proxy`
-   - **Remote MCP server URL:** `http://127.0.0.1:8080/mcp`
-
-   **Option B — JSON config (Desktop manages the server for you)**
-
-   Add this to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows):
+3. **Add it to Claude Desktop.** Add this to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows):
 
    ```json
    {
@@ -51,6 +34,10 @@ Cowork tasks run in a sandbox with no network access. This proxy lets them make 
    ```
 
    Restart Claude Desktop. It will start and stop the server automatically — no terminal needed.
+
+   > **Note:** If `mcp-network-proxy` isn't on your `PATH`, use the full path to the binary (e.g. `/Users/you/.cargo/bin/mcp-network-proxy`).
+
+   > **Alternative:** You can also use the Connectors UI (**Settings → Connectors → Add custom connector**), but this requires an HTTPS URL — you'd need to run the server in HTTP mode (`mcp-network-proxy http --bind 127.0.0.1:8080`) and front it with something like [ngrok](https://ngrok.com/) to provide an HTTPS endpoint.
 
 ## Test it
 
