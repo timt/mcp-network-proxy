@@ -77,6 +77,45 @@ Stdio form:
 }
 ```
 
+## Using it with Claude Cowork
+
+Cowork tasks run inside a sandbox that can't reach the open internet. The trick is to run `mcp-network-proxy` on your own machine and let Cowork talk to it as a remote MCP server. Because Cowork runs on Anthropic's infrastructure, "localhost" on your laptop isn't reachable from the task — you need a public URL that tunnels back to your machine.
+
+End-to-end setup:
+
+1. **Install and run the proxy locally** in HTTP mode:
+
+   ```sh
+   cargo install --path .
+   mcp-network-proxy http --bind 127.0.0.1:8080
+   ```
+
+   Keep it bound to `127.0.0.1` — never expose it directly on `0.0.0.0`. The tunnel does the exposing.
+
+2. **Expose it via a tunnel** so Cowork can reach it. Any of these work; pick whichever you already use:
+
+   - **Cloudflare Tunnel** (`cloudflared tunnel --url http://127.0.0.1:8080`) — gives you a public `https://*.trycloudflare.com` URL. Front it with Cloudflare Access for auth.
+   - **Tailscale Funnel** (`tailscale funnel 8080`) — public HTTPS URL on your tailnet, no extra account needed if you already have Tailscale.
+   - **ngrok** (`ngrok http 8080`) — quickest to start; use a paid plan + basic auth or an OAuth edge to keep it private.
+
+   **Put authentication in front of the tunnel.** Without it, anyone on the internet who finds the URL can make HTTP requests from your machine — see the security warning above. This is an SSRF primitive; treat the tunnel URL like a credential.
+
+3. **Register it as an MCP server in Cowork.** In Cowork's settings, add a remote MCP server pointing at your tunnel URL (with `/mcp` on the end):
+
+   ```json
+   {
+     "mcpServers": {
+       "network-proxy": {
+         "url": "https://your-tunnel-url.example.com/mcp"
+       }
+     }
+   }
+   ```
+
+4. **Nudge the model in your task prompt** if needed: *"Use the `network-proxy` MCP tools (`fetch`, `get_json`, `post_json`, `download_binary`) for any HTTP requests."* Cowork's sandbox sometimes makes it ambiguous whether the model should reach for these tools, so being explicit helps.
+
+5. **Keep the proxy running.** While your task is in flight, the proxy and the tunnel both have to be up on your machine. On macOS, the cleanest way to make this survive logouts and reboots is a launchd user agent in `~/Library/LaunchAgents/` that runs `mcp-network-proxy http --bind 127.0.0.1:8080` at login.
+
 ## Tools
 
 | Tool | Purpose | Key fields |
