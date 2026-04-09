@@ -20,9 +20,37 @@ Cowork tasks run in a sandbox with no network access. This proxy lets them make 
    cargo install --path .
    ```
 
-3. **Enable in Claude Desktop:** Go to **Settings → Connectors**, find `mcp-network-proxy`, and enable it.
+3. **Add it to Claude Desktop** — pick one:
 
-Done. Claude Desktop handles starting and stopping the server automatically.
+   **Option A — Connectors UI (run the server yourself)**
+
+   Start the server in a terminal and leave it running:
+
+   ```sh
+   mcp-network-proxy http --bind 127.0.0.1:8080
+   ```
+
+   Then in Claude Desktop go to **Settings → Connectors → Add custom connector** and enter:
+
+   - **Name:** `network-proxy`
+   - **Remote MCP server URL:** `http://127.0.0.1:8080/mcp`
+
+   **Option B — JSON config (Desktop manages the server for you)**
+
+   Add this to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows):
+
+   ```json
+   {
+     "mcpServers": {
+       "network-proxy": {
+         "command": "mcp-network-proxy",
+         "args": ["stdio"]
+       }
+     }
+   }
+   ```
+
+   Restart Claude Desktop. It will start and stop the server automatically — no terminal needed.
 
 ## Test it
 
@@ -43,7 +71,7 @@ If it works, you'll see the httpbin JSON response and confirmation that it used 
 
 ## Security warning
 
-**This server has no authentication.** It only listens on `localhost` by default, and Claude Desktop manages its lifecycle. Do not expose it to the network without putting authentication in front of it.
+**This server has no authentication.** It only listens on `localhost` by default. Do not expose it to the network without putting authentication in front of it.
 
 ## Development
 
