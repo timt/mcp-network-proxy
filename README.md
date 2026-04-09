@@ -43,9 +43,9 @@ Cowork tasks run in a sandbox with no network access. This proxy lets them make 
 
 Create a Cowork task with this prompt:
 
-> Use the `get_json` network-proxy tool to fetch `https://httpbin.org/get` and show me the response. Tell me which tool you used.
+> Go to `https://httpbin.org/get` and show me the response. Tell me which tool you used.
 
-If it works, you'll see the httpbin JSON response and confirmation that it used the `get_json` tool from `network-proxy`.
+If it works, you'll see the JSON response and confirmation that it used the `get_json` tool from `network-proxy`.
 
 ## Tools
 
